@@ -9,12 +9,12 @@ In Multiprogramming, if the long term scheduler picks more I/O bound processes t
 If most of the running processes change their state from running to waiting then there may always be a possibility of deadlock in the system. Hence to reduce this overhead, the OS needs to schedule the jobs to get the optimal utilization of CPU and to avoid the possibility to deadlock.
 
 ## The Purpose of a Scheduling algorithm
-1.Maximum CPU utilization
-2.Fare allocation of CPU
-3.Maximum throughput
-4.Minimum turnaround time
-5.Minimum waiting time
-6.Minimum response time
+1.Maximum CPU utilization <br>
+2.Fare allocation of CPU <br>
+3.Maximum throughput <br>
+4.Minimum turnaround time <br>
+5.Minimum waiting time <br>
+6.Minimum response time <br>
 
 ## Pre-emptive Algorithms 
 ### 1. Shortest Remaining Time First
