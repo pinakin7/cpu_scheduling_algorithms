@@ -78,41 +78,46 @@ int main(){
     int timer = 0 + p[curr].arrival_time;
     // timer_chart.push(0);
     while(!stop(p,n)){
-        for(int i = 0; i < n; i++){
-            if((p[i].id != curr) && (!p[i].done) && (timer >= p[i].arrival_time)){
-                if(p[i].remaining_time < p[curr].remaining_time){
-                    curr = i;
+        if(timer >= p[curr].arrival_time){
+            for(int i = 0; i < n; i++){
+                if((p[i].id != curr) && (!p[i].done) && (timer >= p[i].arrival_time)){
+                    if(p[i].remaining_time < p[curr].remaining_time){
+                        curr = i;
+                    }
                 }
             }
-        }
-        if(!p[curr].done){
-            if(p[curr].remaining_time > 1){
-                p[curr].remaining_time--;
-                timer++;
-                gantt_chart.push(p[curr].id);
-                // timer_chart.push(timer);
+            if(!p[curr].done){
+                if(p[curr].remaining_time > 1){
+                    p[curr].remaining_time--;
+                    timer++;
+                    gantt_chart.push(p[curr].id);
+                    // timer_chart.push(timer);
 
-                // cout<<" "<<p[curr].id;
+                    // cout<<" "<<p[curr].id;
+                }
+                else{
+                    p[curr].remaining_time--;
+                    timer++;
+                    p[curr].completion_time = timer;
+                    p[curr].done = true;
+                    p[curr].turn_around_time = p[curr].completion_time - p[curr].arrival_time;
+                    p[curr].waiting_time = p[curr].turn_around_time - p[curr].burst_time;
+                    gantt_chart.push(p[curr].id);
+                    // timer_chart.push(timer);
+                    // cout<<" "<<p[curr].id;
+                }
             }
             else{
-                p[curr].remaining_time--;
-                timer++;
-                p[curr].completion_time = timer;
-                p[curr].done = true;
-                p[curr].turn_around_time = p[curr].completion_time - p[curr].arrival_time;
-                p[curr].waiting_time = p[curr].turn_around_time - p[curr].burst_time;
-                gantt_chart.push(p[curr].id);
-                // timer_chart.push(timer);
-                // cout<<" "<<p[curr].id;
+                for(int i = 0; i < n; i++){
+                    if((timer >= p[i].arrival_time) && (!p[i].done)){
+                        curr = i;
+                        break;
+                    }
+                }
             }
         }
         else{
-            for(int i = 0; i < n; i++){
-                if((timer >= p[i].arrival_time) && (!p[i].done)){
-                    curr = i;
-                    break;
-                }
-            }
+            timer++;
         }
         
     }
