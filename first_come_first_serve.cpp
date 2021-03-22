@@ -1,12 +1,26 @@
 #include<bits/stdc++.h>
+
 using namespace std;
+
+void print_gantt_chart(queue<int> q){
+    cout<<"\n Gannt Chart : ";
+    while(!q.empty()){
+        cout<<" P"<<q.front()<<" ";
+        q.pop();
+    }
+}
+
 int main(){
+    queue<int> gantt_chart;
     set< pair<int,pair<int,int> > > process_de;
+    
     int n,id,at,bt;
     cout<<" Enter The number of process : ";
     cin>>n;
+    
     int waiting_time[n];
     int x = n;
+    
     while(x--){
         cout<<" Enter The Process Id : ";
         cin>>id;
@@ -33,13 +47,18 @@ int main(){
          timer = timer + burst_time;
          cout<<" Process Id : "<<p_id<<" Arrival Time : "<<arrival_time;
          cout<<" Burst Time : "<<burst_time<<" Waiting Time : "<<waiting_time[p_id]<<endl;
-     }
+        gantt_chart.push(p_id);
+    }
     float avg_wait = 0;
     for(int i=1;i<=n;i++){
         avg_wait += waiting_time[i];
     }
     avg_wait = (float)avg_wait/(float)n;
     cout<<" Average Waiting Time : "<<avg_wait<<endl;
+
+
+    print_gantt_chart(gantt_chart);
+    cout<<endl;
 
     return 0;
 }
