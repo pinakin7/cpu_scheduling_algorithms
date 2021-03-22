@@ -2,8 +2,15 @@
 using namespace std;
 queue<int> ready_queue;
 
-struct process
-{
+void print_gantt_chart(queue<int> q){
+    cout<<"\n Gannt Chart : ";
+    while(!q.empty()){
+        cout<<" P"<<q.front()<<" ";
+        q.pop();
+    }
+}
+
+struct process{
     int id;
     int arrival_time;
     int burst_time;
@@ -34,6 +41,8 @@ void display(process *p,int n){
 }
 
 int main(){
+    queue<int> gantt_chart;
+    
     int n;
     cout<<" \n Enter the number of processes : ";
     cin>>n;
@@ -81,8 +90,9 @@ int main(){
             if(p[id].remaining_time > time_quantum){
                 timer = timer + time_quantum;
                 p[id].remaining_time = p[id].remaining_time - time_quantum;
+                gantt_chart.push(p[id].id);
                 //cout<<" "<<id;
-		for(int i = 0; i < n; i++){
+		        for(int i = 0; i < n; i++){
                     if((timer >= p[i].arrival_time) && (p[i].id != id)){
                         // cout<<" Found : "<<found(p[i].id)<<endl;
                         if((!p[i].done) && (!found(p[i].id))){
@@ -104,6 +114,7 @@ int main(){
                 p[id].completion_time = timer;
                 p[id].turn_around_time = p[id].completion_time - p[id].arrival_time;
                 p[id].waiting_time = p[id].turn_around_time - p[id].burst_time;
+                gantt_chart.push(p[id].id);
                 for(int i = 0; i < n; i++){
                     if((timer >= p[i].arrival_time) && (p[i].id != id)){
                         // cout<<" Found : "<<found(p[i].id)<<endl;
@@ -123,11 +134,18 @@ int main(){
          
         ready_queue.pop();   
     }
+
     float avg_wait = 0;
+    
+    cout<<" CPU Scheduled Using Round Robin Algorithm : \n";
     display(p,n);
     for(int i = 0; i < n; i++){
         avg_wait += p[i].waiting_time; 
     }
     cout<<"\n Average Waiting Time : "<<avg_wait/n<<endl;
+
+    print_gantt_chart(gantt_chart);
+    cout<<endl;
+    
     return 0;
 }
