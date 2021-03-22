@@ -77,29 +77,34 @@ int main(){
     timer = timer + p[curr].arrival_time;
 
     while(!stop(p,n)){
-        for(int i = 0; i < n; i++){
-            if((p[i].id != curr) && (!p[i].done) && (timer >= p[i].arrival_time)){
-                if(p[i].burst_time < p[curr].burst_time){
-                    curr = i;
+        if(timer >= p[curr].arrival_time){
+            for(int i = 0; i < n; i++){
+                if((p[i].id != curr) && (!p[i].done) && (timer >= p[i].arrival_time)){
+                    if(p[i].burst_time < p[curr].burst_time){
+                        curr = i;
+                    }
                 }
             }
-        }
-        if(!p[curr].done){
-            timer += p[curr].burst_time;
-            p[curr].completion_time = timer;
-            p[curr].done = true;
-            p[curr].turn_around_time = p[curr].completion_time - p[curr].arrival_time;
-            p[curr].waiting_time = p[curr].turn_around_time - p[curr].burst_time;
-            gantt_chart.push(p[curr].id);
-                
+            if(!p[curr].done){
+                timer += p[curr].burst_time;
+                p[curr].completion_time = timer;
+                p[curr].done = true;
+                p[curr].turn_around_time = p[curr].completion_time - p[curr].arrival_time;
+                p[curr].waiting_time = p[curr].turn_around_time - p[curr].burst_time;
+                gantt_chart.push(p[curr].id);
+                    
+            }
+            else{
+                for(int i = 0; i < n; i++){
+                    if((timer >= p[i].arrival_time) && (!p[i].done)){
+                        curr = i;
+                        break;
+                    }
+                }
+            }
         }
         else{
-            for(int i = 0; i < n; i++){
-                if((timer >= p[i].arrival_time) && (!p[i].done)){
-                    curr = i;
-                    break;
-                }
-            }
+            timer++;
         }
     }
 
