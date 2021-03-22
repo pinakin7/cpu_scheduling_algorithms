@@ -26,3 +26,7 @@ In the Round Robin scheduling algorithm, the OS defines a time quantum (slice). 
 ## Non Pre-emptive Algorithms
 ### 1. First Come First Serve
 It is the simplest algorithm to implement. The process with the minimal arrival time will get the CPU first. The lesser the arrival time, the sooner will the process gets the CPU. It is the non-preemptive type of scheduling.
+
+### 2. Shortest Job First
+In SJF scheduling, the process with the lowest burst time, among the list of available processes in the ready queue, is going to be scheduled next.
+However, it is very difficult to predict the burst time needed for a process hence this algorithm is very difficult to implement in the system.
