@@ -4,8 +4,7 @@
 
 using namespace std;
 
-struct process
-{
+struct process{
     int id;
     int arrival_time;
     int burst_time;
@@ -21,6 +20,14 @@ void display(process *p,int n){
         cout<<" Process ID : "<<p[i].id<<" Arrival Time : "<<p[i].arrival_time<<" Burst Time : "<<p[i].burst_time;
         cout<<" Completion Time : "<<p[i].completion_time<<" Turn Around Time : "<<p[i].turn_around_time;
         cout<<" Waiting Time : "<<p[i].waiting_time<<endl;
+    }
+}
+
+void print_gantt_chart(queue<int> q){
+    cout<<"\n Gannt Chart : ";
+    while(!q.empty()){
+        cout<<" P"<<q.front()<<" ";
+        q.pop();
     }
 }
 
@@ -43,6 +50,8 @@ int main(){
     cout<<"\n Enter the number of Processes : ";
     cin>>n;
     
+    queue<int> gantt_chart;
+    // queue<int> timer_chart;
     process p[n];
     for(int i = 0; i < n; i++){
         p[i].id = i;
@@ -67,7 +76,7 @@ int main(){
 
     int curr = 0;
     int timer = 0 + p[curr].arrival_time;
-
+    // timer_chart.push(0);
     while(!stop(p,n)){
         for(int i = 0; i < n; i++){
             if((p[i].id != curr) && (!p[i].done) && (timer >= p[i].arrival_time)){
@@ -80,6 +89,8 @@ int main(){
             if(p[curr].remaining_time > 1){
                 p[curr].remaining_time--;
                 timer++;
+                gantt_chart.push(p[curr].id);
+                // timer_chart.push(timer);
 
                 // cout<<" "<<p[curr].id;
             }
@@ -90,7 +101,8 @@ int main(){
                 p[curr].done = true;
                 p[curr].turn_around_time = p[curr].completion_time - p[curr].arrival_time;
                 p[curr].waiting_time = p[curr].turn_around_time - p[curr].burst_time;
-                
+                gantt_chart.push(p[curr].id);
+                // timer_chart.push(timer);
                 // cout<<" "<<p[curr].id;
             }
         }
@@ -105,6 +117,8 @@ int main(){
         
     }
 
+
+    cout<<" CPU Scheduled Using Shortest Remaining Time First Algorithm : \n";     
     display(p,n);
 
     float avg_wait = 0;
@@ -115,5 +129,10 @@ int main(){
 
     cout<<"\n Average Waiting Time : "<<avg_wait/n<<endl;
     
+    print_gantt_chart(gantt_chart);
+    cout<<endl;
+    // print_timer_chart(timer_chart);
+    // cout<<endl;
+
     return 0;
 }
