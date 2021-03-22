@@ -72,67 +72,68 @@ int main(){
 
     int time_quantum = 2;
     int timer = 0;
-    int id = p[0].id;
+    int curr = 0;
     timer = timer + p[0].arrival_time;
     // cout<<time<<id;
 
     
-    ready_queue.push(id);
+    ready_queue.push(p[curr].id);
     // cout<<ready_queue.size();
   //  cout<<id<<"\npushed\n";
-
+    // int id = p[curr].id;
 	cout<<endl;
     while(!ready_queue.empty()){
         // ready_queue.pop();
         
-        id = ready_queue.front();
-        if(!p[id].done){
-            if(p[id].remaining_time > time_quantum){
-                timer = timer + time_quantum;
-                p[id].remaining_time = p[id].remaining_time - time_quantum;
-                gantt_chart.push(p[id].id);
-                //cout<<" "<<id;
-		        for(int i = 0; i < n; i++){
-                    if((timer >= p[i].arrival_time) && (p[i].id != id)){
-                        // cout<<" Found : "<<found(p[i].id)<<endl;
-                        if((!p[i].done) && (!found(p[i].id))){
-                            ready_queue.push(p[i].id);
-                            // cout<<p[i].id<<" pushed at "<<timer<<endl;
+        curr = ready_queue.front();
+        if(timer >= p[curr].arrival_time){
+            if(!p[curr].done){
+                if(p[curr].remaining_time > time_quantum){
+                    timer = timer + time_quantum;
+                    p[curr].remaining_time = p[curr].remaining_time - time_quantum;
+                    gantt_chart.push(p[curr].id);
+                    //cout<<" "<<id;
+                    for(int i = 0; i < n; i++){
+                        if((timer >= p[i].arrival_time) && (p[i].id != p[curr].id)){
+                            // cout<<" Found : "<<found(p[i].id)<<endl;
+                            if((!p[i].done) && (!found(p[i].id))){
+                                ready_queue.push(i);
+                                // cout<<p[i].id<<" pushed at "<<timer<<endl;
+                            }
                         }
+                        
                     }
-                    
+                    ready_queue.push(curr);
+                    // cout<<id<<" pushed at "<<timer<<endl;
                 }
-                ready_queue.push(id);
-                // cout<<id<<" pushed at "<<timer<<endl;
-            }
-            else{
-                p[id].done = true;
-                //cout<<id<<"completed"<<endl;
-                //cout<<" "<<id;
-		        timer = timer + p[id].remaining_time;
-                p[id].remaining_time = 0;
-                p[id].completion_time = timer;
-                p[id].turn_around_time = p[id].completion_time - p[id].arrival_time;
-                p[id].waiting_time = p[id].turn_around_time - p[id].burst_time;
-                gantt_chart.push(p[id].id);
-                for(int i = 0; i < n; i++){
-                    if((timer >= p[i].arrival_time) && (p[i].id != id)){
-                        // cout<<" Found : "<<found(p[i].id)<<endl;
-                        if((!p[i].done) && (!found(p[i].id))){
-                            ready_queue.push(p[i].id);
-                            // cout<<p[i].id<<" pushed at "<<timer<<endl;
+                else{
+                    p[curr].done = true;
+                    //cout<<id<<"completed"<<endl;
+                    //cout<<" "<<id;
+                    timer = timer + p[curr].remaining_time;
+                    p[curr].remaining_time = 0;
+                    p[curr].completion_time = timer;
+                    p[curr].turn_around_time = p[curr].completion_time - p[curr].arrival_time;
+                    p[curr].waiting_time = p[curr].turn_around_time - p[curr].burst_time;
+                    gantt_chart.push(p[curr].id);
+                    for(int i = 0; i < n; i++){
+                        if((timer >= p[i].arrival_time) && (p[i].id != p[curr].id)){
+                            // cout<<" Found : "<<found(p[i].id)<<endl;
+                            if((!p[i].done) && (!found(p[i].id))){
+                                ready_queue.push(i);
+                                // cout<<p[i].id<<" pushed at "<<timer<<endl;
+                            }
                         }
+                        
                     }
-                    
                 }
             }
-        //	ready_queue.pop();
-	}
-	// else{
-	// 	ready_queue.pop();
-	// }
-         
-        ready_queue.pop();   
+            ready_queue.pop();
+        }
+        else{
+            timer++;
+        }
+           
     }
 
     float avg_wait = 0;
